@@ -155,3 +155,9 @@ Esto permite utilizar las operaciones CRUD proporcionadas por Spring Data JPA.
 También se implementa una consulta personalizada para buscar deportistas por categoría:
 
 findByCategoriaIgnoreCase(String categoria)
+
+## Ejecución del proyecto
+
+### Requisitos previos
+
+Antes de ejecutar el proyecto se debe contar con:
