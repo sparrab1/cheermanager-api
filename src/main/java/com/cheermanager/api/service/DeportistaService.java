@@ -2,82 +2,39 @@ package com.cheermanager.api.service;
 
 import com.cheermanager.api.dto.DeportistaRequest;
 import com.cheermanager.api.model.Deportista;
+import com.cheermanager.api.repository.DeportistaRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class DeportistaService {
 
-    private final List<Deportista> deportistas = new ArrayList<>();
+    private final DeportistaRepository deportistaRepository;
 
-    private Long siguienteId = 1L;
-
-    public DeportistaService() {
-
-        deportistas.add(new Deportista(
-                siguienteId++,
-                "Valentina",
-                "Gómez",
-                13,
-                "Junior",
-                "Nivel 2",
-                "Flyer",
-                "ACTIVO"
-        ));
-
-        deportistas.add(new Deportista(
-                siguienteId++,
-                "Mariana",
-                "Rodríguez",
-                15,
-                "Junior",
-                "Nivel 3",
-                "Base",
-                "ACTIVO"
-        ));
-
-        deportistas.add(new Deportista(
-                siguienteId++,
-                "Sofía",
-                "Martínez",
-                14,
-                "Juvenil",
-                "Nivel 2",
-                "Back Spot",
-                "ACTIVO"
-        ));
+    public DeportistaService(DeportistaRepository deportistaRepository) {
+        this.deportistaRepository = deportistaRepository;
     }
 
     // Obtener todos los deportistas
     public List<Deportista> obtenerTodos() {
-        return deportistas;
+        return deportistaRepository.findAll();
     }
 
-    // Obtener un deportista por ID
+    // Obtener deportista por ID
     public Deportista obtenerPorId(Long id) {
-
-        return deportistas.stream()
-                .filter(deportista -> deportista.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+        return deportistaRepository.findById(id).orElse(null);
     }
 
     // Buscar deportistas por categoría
     public List<Deportista> buscarPorCategoria(String categoria) {
-
-        return deportistas.stream()
-                .filter(deportista ->
-                        deportista.getCategoria().equalsIgnoreCase(categoria))
-                .toList();
+        return deportistaRepository.findByCategoriaIgnoreCase(categoria);
     }
 
     // Registrar un nuevo deportista
     public Deportista registrar(DeportistaRequest request) {
 
         Deportista nuevoDeportista = new Deportista(
-                siguienteId++,
                 request.nombre(),
                 request.apellido(),
                 request.edad(),
@@ -87,8 +44,37 @@ public class DeportistaService {
                 "ACTIVO"
         );
 
-        deportistas.add(nuevoDeportista);
+        return deportistaRepository.save(nuevoDeportista);
+    }
 
-        return nuevoDeportista;
+    // Actualizar un deportista existente
+    public Deportista actualizar(Long id, DeportistaRequest request) {
+
+        Deportista deportista = deportistaRepository.findById(id)
+                .orElse(null);
+
+        if (deportista == null) {
+            return null;
+        }
+
+        deportista.setNombre(request.nombre());
+        deportista.setApellido(request.apellido());
+        deportista.setEdad(request.edad());
+        deportista.setCategoria(request.categoria());
+        deportista.setNivel(request.nivel());
+        deportista.setPosicion(request.posicion());
+
+        return deportistaRepository.save(deportista);
+    }
+
+    // Eliminar un deportista
+    public boolean eliminar(Long id) {
+
+        if (!deportistaRepository.existsById(id)) {
+            return false;
+        }
+
+        deportistaRepository.deleteById(id);
+        return true;
     }
 }

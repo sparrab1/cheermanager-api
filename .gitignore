@@ -2,6 +2,11 @@
 target/
 !.mvn/wrapper/maven-wrapper.jar
 
+# Base de datos H2
+/data/
+*.mv.db
+*.trace.db
+
 # IDE - Visual Studio Code
 .vscode/
 
@@ -14,16 +19,6 @@ target/
 .project
 .settings/
 
-# Java
-*.class
-
-# Logs
-*.log
-
-# Sistema operativo
+# Archivos del sistema operativo
 .DS_Store
 Thumbs.db
-
-# Archivos temporales
-*.tmp
-*.temp

@@ -1,8 +1,17 @@
 package com.cheermanager.api.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Deportista {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String nombre;
     private String apellido;
     private int edad;
@@ -11,13 +20,14 @@ public class Deportista {
     private String posicion;
     private String estado;
 
+    // Constructor vacío requerido por JPA
     public Deportista() {
     }
 
-    public Deportista(Long id, String nombre, String apellido,
-                      int edad, String categoria, String nivel,
+    // Constructor para crear nuevos deportistas
+    public Deportista(String nombre, String apellido, int edad,
+                      String categoria, String nivel,
                       String posicion, String estado) {
-        this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
         this.edad = edad;
